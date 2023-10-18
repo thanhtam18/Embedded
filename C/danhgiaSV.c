@@ -1,127 +1,86 @@
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 
 typedef union{
-    char xepLoai;
-}xeploai;
+    char gradeChar;
+    float gradeNum;
+}grade;
+
+typedef enum{
+    CHAR,
+    NUMBER
+}typeGrade;
 
 typedef struct{
-    char ten[10];
-    int maSo;
-    double diem;
-    xeploai diemChu;
-}sinhvien;
+    char name[20];
+    char id[10];
+    grade Grade;
+    typeGrade type;
+}student;
 
-char xepLoai(sinhvien *sv){
-    if(sv->diem >= 9.0)
-        return sv->diemChu.xepLoai = 'A';
-    else if(sv->diem >= 8.0)
-        return sv->diemChu.xepLoai = 'B';
-    else if(sv->diem >= 7.0)
-        return sv->diemChu.xepLoai = 'C';
-    else if(sv->diem >= 6.0)
-        return sv->diemChu.xepLoai = 'D';
-    else if(sv->diem >= 5.0)
-        return sv->diemChu.xepLoai = 'E';
-    else if(sv->diem < 5.0)
-        return sv->diemChu.xepLoai = 'F';
-}
-
-void consoleLog(sinhvien sv[], int quantity){
-    for (int i = 0; i < quantity; i++){
-        int index = 0;
-        printf("%d. ",i+1);
-        printf("%s\t",sv[i].ten);
-        while(sv[i].ten[index] != '\0')
-            index++;
-        if(index < 5)
-            printf("\t");
-        printf("%d\t%0.1f\t%c",sv[i].maSo,sv[i].diem,xepLoai(&sv[i]));
-        printf("\r\n");
+int compareName(const student *a, const student *b){
+    const char *studenA = a->name;
+    const char *studenB = b->name;
+    while(*studenA && *studenB && *studenA == *studenB){
+        ++studenA;
+        ++studenB;
     }
+    return (int)(*studenA) - (int)(*studenB);
 }
 
-void xepTheoTen(sinhvien sv[], int quantity){
-    for (int i = 0; i < quantity - 1; i++)
-    {
-        for(int j = 0; j < quantity - i - 1; j++){
-            if(sv[j].ten[0] > sv[j+1].ten[0]){
-                sinhvien temp = sv[j];
-                sv[j] = sv[j+1];
-                sv[j+1] = temp;
-            }
-            else if(sv[j].ten[0] == sv[j+1].ten[0]){
-                int index = 1;
-                while(sv[j].ten[index] !='\0' && sv[j+1].ten[index] !='\0'){
-                    if(sv[j].ten[index] > sv[j+1].ten[index]){
-                        sinhvien temp = sv[j];
-                        sv[j] = sv[j+1];
-                        sv[j+1] = temp;
-                    }
-                    index++;
-                }
+int compareId(const student *a, const student *b){
+    const char *studenA = a->id;
+    const char *studenB = b->id;
+    while(*studenA && *studenB && *studenA == *studenB){
+        ++studenA;
+        ++studenB;
+    }
+    return (int)(*studenA) - (int)(*studenB);
+}
+
+int compareGrade(const student *a, const student *b){
+    if(a->type == NUMBER && b->type == NUMBER)
+        return (int)(a->Grade.gradeNum - b->Grade.gradeNum);
+    else if(a->type == CHAR && b->type == CHAR)
+        return (int)((a->Grade.gradeChar - b->Grade.gradeChar)*(-1));
+    else if(a->type == CHAR && b->type == NUMBER)
+        return (int)((a->Grade.gradeChar - b->Grade.gradeNum));
+    else if(a->type == NUMBER && b->type == CHAR)
+        return (int)((a->Grade.gradeNum - b->Grade.gradeChar));
+}
+
+void sortStudent(student studentsList[], int n, int(*compare)(const student*,const student*)){
+    for(int i = 0; i < n -1; i ++){
+        for (int j = 0; j < n - i -1; j++){
+            if(compare(studentsList + j, studentsList + j + 1) > 0){
+                student temp = studentsList[j];
+                studentsList[j] = studentsList[j+1];
+                studentsList[j+1] = temp;
             }
         }
     }
-    consoleLog(sv,quantity);
 }
 
-void xepTheoDiem(sinhvien sv[], int quantity){
-    for (int i = 0; i < quantity - 1; i++)
-    {
-        for(int j = 0; j < quantity - i - 1; j++){
-            if(sv[j].diem > sv[j+1].diem){
-                sinhvien temp = sv[j];
-                sv[j] = sv[j+1];
-                sv[j+1] = temp;
-            }
-        }
+void printList(student *list, int n){
+    for(int i = 0; i < n; i++){
+        printf("Name: %s\tID: %s\tGrade: ", list[i].name, list[i].id);
+        if(list[i].type == CHAR)
+            printf("%c\r\n",list[i].Grade.gradeChar);
+        else
+            printf("%f\r\n",list[i].Grade.gradeNum);
     }
-    consoleLog(sv,quantity); 
 }
 
-void xepTheoMSSV(sinhvien sv[], int quantity){
-    for (int i = 0; i < quantity - 1; i++)
-    {
-        for(int j = 0; j < quantity - i - 1; j++){
-            if(sv[j].maSo > sv[j+1].maSo){
-                sinhvien temp = sv[j];
-                sv[j] = sv[j+1];
-                sv[j+1] = temp;
-            }
-        }
-    }
-    consoleLog(sv,quantity);
-}
-
-int main(int argc, char const *argv[])  
+int main(int argc, char const *argv[])
 {
-    int quantity;
-    int type;
-    do{
-        printf("Nhap so luong sinh vien: ");
-        scanf("%d",&quantity);
-    }while(quantity <= 0);
-    sinhvien *sv = (sinhvien*)malloc(sizeof(sinhvien)*quantity);
-    void (*funtion[])(sinhvien*,int) = {&xepTheoTen, &xepTheoDiem, &xepTheoMSSV};
-    for(int i = 0; i < quantity; i++){
-        printf("Nhap Ten sinh vien thu %d: ",i+1);
-        scanf("%s",&sv[i].ten);
-        printf("Nhap MSSV thu %d: ",i+1);
-        scanf("%d",&sv[i].maSo);
-        do{
-        printf("Nhap Diem thu %d: ",i+1);
-        scanf("%lf",&sv[i].diem);
-        }while(sv[i].diem < 0 || sv[i].diem > 10);
-    }
-    while(1){
-    do{
-    printf("\r\nSap xep danh sach:\t1. Theo Ten\t2. Theo Diem\t3. Theo MSSV\tChon: ");
-    scanf("%d",&type);
-    }while(type != 1 && type != 2 && type != 3);
-    printf("\r\nTen\t\tMSSV\tDiem\tXep Loai\r\n");
-    funtion[type-1](sv,quantity);
-    }
-    free(sv);
+    student studentList[] = {
+        {.name = "Tam", .id = "I101", .Grade.gradeNum = 9.5, .type = NUMBER},
+        {.name = "Binh", .id = "I105", .Grade.gradeChar = 'C', .type = CHAR},
+        {.name = "Khanh", .id = "I103", .Grade.gradeNum = 8.3, .type = NUMBER},
+        {.name = "Dung", .id = "I102", .Grade.gradeChar = 'A', .type = CHAR}
+    };
+    sortStudent(studentList,4,&compareGrade);
+    printList(studentList,4);
     return 0;
 }
