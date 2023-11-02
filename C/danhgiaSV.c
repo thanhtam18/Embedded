@@ -81,6 +81,8 @@ int main(int argc, char const *argv[])
         {.name = "Dung", .id = "I102", .Grade.gradeChar = 'A', .type = CHAR}
     };
     sortStudent(studentList,4,&compareGrade);
+    //sortStudent(studentList,4,&compareId);
+    //sortStudent(studentList,4,&compareName);
     printList(studentList,4);
     return 0;
 }

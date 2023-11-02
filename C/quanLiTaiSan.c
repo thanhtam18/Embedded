@@ -52,5 +52,6 @@ int main(int argc, char const *argv[])
         {.maTaiSan = "TB0483", .giaTri = XE, .thongTinTaiSan.thongTinXe.bienSo = "59A1-89328" , .thongTinTaiSan.thongTinXe.loaiXe = "Wave"}
     };
     inDanhSach(danhSach,4,&danhSachNha);
+    //inDanhSach(danhSach,4,&danhSachXe);
     return 0;
 }

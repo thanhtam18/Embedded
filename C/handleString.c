@@ -107,7 +107,7 @@ void replaceString(char string[], char words[], char replaceWords[]){
 int main(int argc, char const *argv[])
 {
     char string[] = "to learn around the world learn how to do anything. today we learn ab that";
-    //capitalWords(string);
+    capitalWords(string);
     //findWords(string,"learn");
     //replaceString(string,"learn","haha");
     //replaceString(string,"ab","about"); 
