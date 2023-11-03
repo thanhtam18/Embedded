@@ -18,7 +18,7 @@ typedef enum{
 
 typedef enum{
     TEN,
-    TUOI,
+    MSSV,
     DIEM_TB
 }SapXep;
 
@@ -194,26 +194,23 @@ void Menu :: sapXepSinhVien(SapXep type){
     {
         case TEN:
             for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){
-                
                 for(list<SinhVien>::iterator j = dataBase.begin(); j != dataBase.end(); j++){
                     if(soSanhTen(j->getTenSV(),i->getTenSV()) > 0)
                         swap(j,i);
                 }
             }
             break;
-        case TUOI:
-            for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){
-                list<SinhVien>::iterator j = dataBase.begin();
-                for(j; j != dataBase.end(); j++){
-                    if(soSanhTuoi(j->getTuoi(),i->getTuoi()) > 0)
-                        swap(i,j);
+        case MSSV:
+            for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){    
+                for(list<SinhVien>::iterator j = dataBase.begin(); j != dataBase.end(); j++){
+                    if(soSanhTuoi(j->getMSSV(),i->getMSSV()) > 0)
+                        swap(j,i);
                 }
             }
             break;
         case DIEM_TB:
             for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){
-                list<SinhVien>::iterator j = dataBase.begin();
-                for(j; j != dataBase.end(); j++){
+                for(list<SinhVien>::iterator j = dataBase.begin(); j != dataBase.end(); j++){
                     if(soSanhDiemTB(j->getDiemTrungBinh(),i->getDiemTrungBinh()) > 0)
                         swap(j,i);
                 }
@@ -233,17 +230,27 @@ void addSinhVien(Menu *mn){
     cout<<"------ Them Sinh Vien ------"<<endl;
     cout<<"Nhap Ten Sinh Vien: ";
     cin>>tenSV;
+    do{
     cout<<"Nhap Tuoi Sinh Vien: ";
     cin>>tuoiSV;
+    }while(tuoiSV < 0 || tuoiSV > 100);
+    do{
     cout<<"Nhap Gioi Tinh Sinh Vien:  0.Nam   1.Nu     Ban Chon: ";
     cin>>gioiTinh;
+    }while(gioiTinh != 0 && gioiTinh != 1);
     gioiTinhSV = (GioiTinh)gioiTinh;
+    do{
     cout<<"Nhap Diem Toan: ";
     cin>>diemToan;
+    }while(diemToan < 0 || diemToan > 10);
+    do{
     cout<<"Nhap Diem Ly: ";
     cin>>diemLy;
+    }while(diemLy < 0 || diemLy > 10);
+    do{
     cout<<"Nhap Diem Hoa: ";
     cin>>diemHoa;      
+    }while(diemHoa < 0 || diemHoa > 10);
     SinhVien sv(tenSV, tuoiSV, gioiTinhSV, diemToan, diemLy, diemHoa);
     mn->themSinhVien(sv);
     cout<<"----------------------------"<<endl;
@@ -270,8 +277,10 @@ void editSinhVien(Menu *mn){
 void sortSinhVien(Menu *mn){
     cout<<"------ Sap Xep Danh Sach ------"<<endl;
     int k;
-    cout<<"Chon kieu sap xep:   0. Theo Ten     1. Theo Tuoi     2. Theo Diem TB     Ban chon: ";
+    do{
+    cout<<"Chon kieu sap xep:   0. Theo Ten     1. Theo MSSV     2. Theo Diem TB     Ban chon: ";
     cin>>k;
+    }while(k != 0 && k != 1 && k != 2);
     SapXep type = (SapXep)k;
     mn->sapXepSinhVien(type);
     cout<<"----------------------------"<<endl;
@@ -298,7 +307,7 @@ int main(int argc, char const *argv[])
 {
     int key;
     Menu menu;
-    do{
+    while(1){
         cout<<"------Menu------"<<endl;
         cout<<"1. Them Sinh Vien"<<endl;
         cout<<"2. Xoa Sinh Vien"<<endl;
@@ -324,7 +333,11 @@ int main(int argc, char const *argv[])
             case 5:
                 sortSinhVien(&menu);
                 break;
+            case 0:
+                return 0;
+            default:
+                cout<<"Chon khong hop le"<<endl;
         }
-    }while(key != 0);
+    }
     return 0;
 }
