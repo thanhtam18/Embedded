@@ -144,17 +144,27 @@ int Menu :: suaSinhVien(int mssv){
             float diemToan, diemLy, diemHoa;
             cout<<"Nhap Ten Sinh Vien: ";
             cin>>tenSV;
+            do{
             cout<<"Nhap Tuoi Sinh Vien: ";
             cin>>tuoiSV;
-            cout<<"Nhap Gioi Tinh Sinh Vien:  0.Nam   1.Nu     Ban Chon: ";
+            }while(tuoiSV < 0 || tuoiSV > 100);
+            do{
+            cout<<"Nhap Gioi Tinh Sinh Vien:  0.Nam   1.Nu    Ban Chon: ";
             cin>>gioiTinh;
+            }while(gioiTinh != 0 && gioiTinh != 1);
             gioiTinhSV = (GioiTinh)gioiTinh;
+            do{
             cout<<"Nhap Diem Toan: ";
             cin>>diemToan;
+            }while(diemToan < 0 || diemToan > 10);
+            do{
             cout<<"Nhap Diem Ly: ";
             cin>>diemLy;
+            }while(diemLy < 0 || diemLy > 10);
+            do{
             cout<<"Nhap Diem Hoa: ";
-            cin>>diemHoa;
+            cin>>diemHoa;      
+            }while(diemHoa < 0 || diemHoa > 10);
             item->setTen(tenSV);
             item->setTuoi(tuoiSV);
             item->setGioiTinh(gioiTinhSV);
