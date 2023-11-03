@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <vector>
+#include <list>
 
 using namespace std;
 
@@ -18,7 +18,7 @@ typedef enum{
 
 typedef enum{
     TEN,
-    MSSV,
+    TUOI,
     DIEM_TB
 }SapXep;
 
@@ -114,12 +114,12 @@ HocLuc SinhVien :: getHocLuc(){
 
 class Menu{
     private:
-        vector<SinhVien> dataBase;
+        list<SinhVien> dataBase;
     public:
         void themSinhVien(SinhVien sv);
         int xoaSinhVien(int mssv);
         int suaSinhVien(int mssv);
-        vector<SinhVien> danhSach();
+        list<SinhVien> danhSach();
         void sapXepSinhVien(SapXep type);
 };
 
@@ -127,17 +127,17 @@ void Menu :: themSinhVien(SinhVien sv){
     dataBase.push_back(sv);
 }
 int Menu :: xoaSinhVien(int mssv){
-    for(int i = 0; i < dataBase.size(); i++){
-        if(dataBase[i].getMSSV() == mssv){
-            dataBase.erase(dataBase.begin()+i);
+    for(list<SinhVien>::iterator item = dataBase.begin(); item != dataBase.end(); item++){
+        if(item->getMSSV() == mssv){
+            dataBase.erase(item);
             return 1;
         }
     }
     return 0;
 }
 int Menu :: suaSinhVien(int mssv){
-    for(int i = 0; i < dataBase.size(); i++){
-        if(dataBase[i].getMSSV() == mssv){
+    for(list<SinhVien>::iterator item = dataBase.begin(); item != dataBase.end(); item++){
+        if(item->getMSSV() == mssv){
             string tenSV;
             int tuoiSV, gioiTinh;
             GioiTinh gioiTinhSV;
@@ -155,18 +155,73 @@ int Menu :: suaSinhVien(int mssv){
             cin>>diemLy;
             cout<<"Nhap Diem Hoa: ";
             cin>>diemHoa;
-            dataBase[i].setTen(tenSV);
-            dataBase[i].setTuoi(tuoiSV);
-            dataBase[i].setGioiTinh(gioiTinhSV);
-            dataBase[i].setDiemToan(diemToan);
-            dataBase[i].setDiemLy(diemLy);
-            dataBase[i].setDiemHoa(diemHoa);
+            item->setTen(tenSV);
+            item->setTuoi(tuoiSV);
+            item->setGioiTinh(gioiTinhSV);
+            item->setDiemToan(diemToan);
+            item->setDiemLy(diemLy);
+            item->setDiemHoa(diemHoa);
             return 1;
         }
     }
     return 0;    
-} 
-vector<SinhVien> Menu :: danhSach(){
+}
+
+void swap(list<SinhVien>::iterator a, list<SinhVien>::iterator b){
+    SinhVien temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;  
+}
+
+int soSanhTen(string sinhVien1, string sinhVien2){
+    int index = 0;
+    while(sinhVien1[index] != '\0' && sinhVien2[index]!='\0' && sinhVien1[index] == sinhVien2[index]){
+        index++;
+    }
+    return (int)sinhVien1[index] - (int)sinhVien2[index];
+}
+
+int soSanhTuoi(int sinhVien1, int sinhVien2){
+    return sinhVien1 - sinhVien2;
+}
+
+float soSanhDiemTB(float sinhVien1, float sinhVien2){
+    return sinhVien1 - sinhVien2;
+}
+void Menu :: sapXepSinhVien(SapXep type){
+    switch (type)
+    {
+        case TEN:
+            for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){
+                
+                for(list<SinhVien>::iterator j = dataBase.begin(); j != dataBase.end(); j++){
+                    if(soSanhTen(j->getTenSV(),i->getTenSV()) > 0)
+                        swap(j,i);
+                }
+            }
+            break;
+        case TUOI:
+            for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){
+                list<SinhVien>::iterator j = dataBase.begin();
+                for(j; j != dataBase.end(); j++){
+                    if(soSanhTuoi(j->getTuoi(),i->getTuoi()) > 0)
+                        swap(i,j);
+                }
+            }
+            break;
+        case DIEM_TB:
+            for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){
+                list<SinhVien>::iterator j = dataBase.begin();
+                for(j; j != dataBase.end(); j++){
+                    if(soSanhDiemTB(j->getDiemTrungBinh(),i->getDiemTrungBinh()) > 0)
+                        swap(j,i);
+                }
+            }
+            break;
+    }
+}
+list<SinhVien> Menu :: danhSach(){
     return dataBase;
 }
 
@@ -212,19 +267,29 @@ void editSinhVien(Menu *mn){
     cout<<"----------------------------"<<endl;
 }
 
+void sortSinhVien(Menu *mn){
+    cout<<"------ Sap Xep Danh Sach ------"<<endl;
+    int k;
+    cout<<"Chon kieu sap xep:   0. Theo Ten     1. Theo Tuoi     2. Theo Diem TB     Ban chon: ";
+    cin>>k;
+    SapXep type = (SapXep)k;
+    mn->sapXepSinhVien(type);
+    cout<<"----------------------------"<<endl;
+}
+
 void display(Menu mn){
-    vector<SinhVien> danhSach;
+    list<SinhVien> danhSach;
     danhSach = mn.danhSach();
     cout<<"----------------------------------------------------------------------------------------------------------------------------------"<<endl;
-    for (int i = 0; i < danhSach.size(); i++){ 
-        cout<<"Ten: "<<danhSach[i].getTenSV();
-        cout<<"\tTuoi: "<<danhSach[i].getTuoi();
-        cout<<"\tGioi Tinh: "<<((danhSach[i].getGioiTinh() == NAM) ? "Nam  " : "Nu   ");
-        cout<<"\tMSSV: "<<danhSach[i].getMSSV();
-        cout<<"\tDiem Toan: "<<danhSach[i].getDiemToan();
-        cout<<"\tDiem Ly: "<<danhSach[i].getDiemLy();
-        cout<<"\tDiem Hoa: "<<danhSach[i].getDiemHoa();
-        cout<<"\tDiem TB: "<<danhSach[i].getDiemTrungBinh()<<endl;
+    for (auto item : danhSach){ 
+        cout<<"Ten: "<<item.getTenSV();
+        cout<<"\tTuoi: "<<item.getTuoi();
+        cout<<"\tGioi Tinh: "<<((item.getGioiTinh() == NAM) ? "Nam  " : "Nu   ");
+        cout<<"\tMSSV: "<<item.getMSSV();
+        cout<<"\tDiem Toan: "<<item.getDiemToan();
+        cout<<"\tDiem Ly: "<<item.getDiemLy();
+        cout<<"\tDiem Hoa: "<<item.getDiemHoa();
+        cout<<"\tDiem TB: "<<item.getDiemTrungBinh()<<endl;
     }
     cout<<"----------------------------------------------------------------------------------------------------------------------------------"<<endl;
 }   
@@ -255,6 +320,9 @@ int main(int argc, char const *argv[])
                 break;
             case 4:
                 display(menu);
+                break;
+            case 5:
+                sortSinhVien(&menu);
                 break;
         }
     }while(key != 0);
