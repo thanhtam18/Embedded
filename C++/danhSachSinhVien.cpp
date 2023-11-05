@@ -177,54 +177,55 @@ int Menu :: suaSinhVien(int mssv){
     return 0;    
 }
 
-void swap(list<SinhVien>::iterator a, list<SinhVien>::iterator b){
-    SinhVien temp;
-    temp = *a;
-    *a = *b;
-    *b = temp;  
-}
-
-int soSanhTen(string sinhVien1, string sinhVien2){
+bool soSanhTen(list<SinhVien>::iterator item1, list<SinhVien>::iterator item2){
     int index = 0;
-    while(sinhVien1[index] != '\0' && sinhVien2[index]!='\0' && sinhVien1[index] == sinhVien2[index]){
+    while(item1->getTenSV()[index] != '\0' && item2->getTenSV()[index]!='\0' && item1->getTenSV()[index] == item2->getTenSV()[index]){
         index++;
     }
-    return (int)sinhVien1[index] - (int)sinhVien2[index];
+    if(((int)item1->getTenSV()[index] - (int)item2->getTenSV()[index]) > 0) 
+        return true;
+    else 
+        return false;
 }
 
-int soSanhTuoi(int sinhVien1, int sinhVien2){
-    return sinhVien1 - sinhVien2;
+bool soSanhMSSV(list<SinhVien>::iterator item1, list<SinhVien>::iterator item2){
+    if((item1->getMSSV() - item2->getMSSV()) > 0)
+        return true;
+    else
+        return false;
 }
 
-float soSanhDiemTB(float sinhVien1, float sinhVien2){
-    return sinhVien1 - sinhVien2;
+bool soSanhDiemTB(list<SinhVien>::iterator item1, list<SinhVien>::iterator item2){
+    if((item1->getDiemTrungBinh() - item2->getDiemTrungBinh()) > 0)
+        return true;
+    else
+        return false;
 }
+
+void sort(list<SinhVien> *db, bool (*sortFuntion)(list<SinhVien>::iterator item1, list<SinhVien>::iterator item2)){
+    for(list<SinhVien>::iterator i = db->begin(); i != db->end(); i++){
+        for(list<SinhVien>::iterator j = db->begin(); j != db->end(); j++){
+            if(sortFuntion(j,i)){   
+                SinhVien temp = *i;
+                *i = *j;
+                *j = temp; 
+            }
+        }
+        
+    } 
+}
+
 void Menu :: sapXepSinhVien(SapXep type){
     switch (type)
     {
         case TEN:
-            for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){
-                for(list<SinhVien>::iterator j = dataBase.begin(); j != dataBase.end(); j++){
-                    if(soSanhTen(j->getTenSV(),i->getTenSV()) > 0)
-                        swap(j,i);
-                }
-            }
+            sort(&dataBase, &soSanhTen);
             break;
         case MSSV:
-            for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){    
-                for(list<SinhVien>::iterator j = dataBase.begin(); j != dataBase.end(); j++){
-                    if(soSanhTuoi(j->getMSSV(),i->getMSSV()) > 0)
-                        swap(j,i);
-                }
-            }
+            sort(&dataBase, &soSanhMSSV);
             break;
         case DIEM_TB:
-            for(list<SinhVien>::iterator i = dataBase.begin(); i != dataBase.end(); i++){
-                for(list<SinhVien>::iterator j = dataBase.begin(); j != dataBase.end(); j++){
-                    if(soSanhDiemTB(j->getDiemTrungBinh(),i->getDiemTrungBinh()) > 0)
-                        swap(j,i);
-                }
-            }
+            sort(&dataBase, &soSanhDiemTB);
             break;
     }
 }
@@ -308,7 +309,24 @@ void display(Menu mn){
         cout<<"\tDiem Toan: "<<item.getDiemToan();
         cout<<"\tDiem Ly: "<<item.getDiemLy();
         cout<<"\tDiem Hoa: "<<item.getDiemHoa();
-        cout<<"\tDiem TB: "<<item.getDiemTrungBinh()<<endl;
+        cout<<"\tDiem TB: "<<item.getDiemTrungBinh();
+        cout<<"\tHoc Luc: ";
+        switch (item.getHocLuc())
+        {
+            case GIOI:
+                cout<<"Gioi"<<endl;
+                break;
+            case KHA:
+                cout<<"Kha"<<endl;
+                break;
+            case TRUNG_BINH:
+                cout<<"Trung Binh"<<endl;
+                break;
+            case YEU:
+                cout<<"Yeu"<<endl;
+                break;
+        }
+
     }
     cout<<"----------------------------------------------------------------------------------------------------------------------------------"<<endl;
 }   
