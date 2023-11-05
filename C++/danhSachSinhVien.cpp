@@ -117,8 +117,8 @@ class Menu{
         list<SinhVien> dataBase;
     public:
         void themSinhVien(SinhVien sv);
-        int xoaSinhVien(int mssv);
-        int suaSinhVien(int mssv);
+        bool xoaSinhVien(int mssv);
+        bool suaSinhVien(int mssv);
         list<SinhVien> danhSach();
         void sapXepSinhVien(SapXep type);
 };
@@ -126,16 +126,16 @@ class Menu{
 void Menu :: themSinhVien(SinhVien sv){
     dataBase.push_back(sv);
 }
-int Menu :: xoaSinhVien(int mssv){
+bool Menu :: xoaSinhVien(int mssv){
     for(list<SinhVien>::iterator item = dataBase.begin(); item != dataBase.end(); item++){
         if(item->getMSSV() == mssv){
             dataBase.erase(item);
-            return 1;
+            return true;
         }
     }
-    return 0;
+    return false;
 }
-int Menu :: suaSinhVien(int mssv){
+bool Menu :: suaSinhVien(int mssv){
     for(list<SinhVien>::iterator item = dataBase.begin(); item != dataBase.end(); item++){
         if(item->getMSSV() == mssv){
             string tenSV;
@@ -171,10 +171,10 @@ int Menu :: suaSinhVien(int mssv){
             item->setDiemToan(diemToan);
             item->setDiemLy(diemLy);
             item->setDiemHoa(diemHoa);
-            return 1;
+            return true;
         }
     }
-    return 0;    
+    return false;    
 }
 
 bool soSanhTen(list<SinhVien>::iterator item1, list<SinhVien>::iterator item2){
