@@ -991,7 +991,6 @@ LABEL1:
         cout<<"Vui long chon: ";
         cin>>key;
     }while(key > 2 || key < 0);
-    
     switch (key){
         case 1:
             Manager(&ql);
