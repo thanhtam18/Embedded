@@ -1,5 +1,4 @@
 #include "stdio.h"
-#include "stdint.h"
 
 enum{
     TRAM,
@@ -14,28 +13,28 @@ enum{
     TY = 10
 };
 
-uint8_t size(const char string[]){
-    uint8_t index = 0;
+int size(const char string[]){
+    int index = 0;
     while (*string++ != '\0')
         index++;
     return index;
 }
 
-void displayNumber(const char number[], uint8_t unit, uint8_t location){
+void displayNumber(const char number[], int unit, int location){
     switch (number[location]){
     case '0':
         if (unit == TRAM)
-            printf("Khong ");
+            printf("Không ");
         else if (unit == CHUC && number[location + 1] != '0')
-            printf("Le ");
+            printf("Lẻ ");
         break;
     case '1':
         if (unit == CHUC)
-            printf("Muoi` ");
-        else if (unit == DONVI && number[location - 1] != '1' && number[location - 1] != '0')
-            printf("Mot' ");
+            printf("Mười ");
+        else if (unit == DONVI && number[location - 1] != '1' && number[location - 1] != '0' && location != 0)
+            printf("Mốt ");
         else
-            printf("Mot. ");
+            printf("Một ");
         break;
     case '2':
         printf("Hai ");
@@ -44,72 +43,86 @@ void displayNumber(const char number[], uint8_t unit, uint8_t location){
         printf("Ba ");
         break;
     case '4':
-        if (unit == DONVI && number[location - 1] != '1' && number[location - 1] != '0')
-            printf("Tu ");
+        if (unit == DONVI && number[location - 1] != '1' && number[location - 1] != '0' && location != 0)
+            printf("Tư ");
         else
-            printf("Bon ");
+            printf("Bốn ");
         break;
     case '5':
-        if (unit == DONVI && number[location - 1] != '0')
-            printf("Lam ");
+        if (unit == DONVI && number[location - 1] != '0' && location != 0)
+            printf("Lăm ");
         else
-            printf("Nam ");      
+            printf("Năm ");      
         break;
     case '6':
-        printf("Sau ");
+        printf("Sáu ");
         break;
     case '7':
-        printf("Bay ");
+        printf("Bảy ");
         break;
     case '8':
-        printf("Tam ");
+        printf("Tám ");
         break;
     case '9':
-        printf("Chin ");
+        printf("Chín ");
         break;
     }
 }
 
 int main(int argc, char const *argv[]){
-    char money[] = "124141654011"; //124 141 654 011
-    uint8_t length = size(money);
-    for (uint8_t i = 0; i < money[i] != '\0'; i++){
-        uint8_t unit = (length - i) % 3;
+
+    char money[] = "150241023824"; // nhập số tiền  
+
+    int length = size(money);   // tính số phần tử của mảng
+
+    for (int i = 0; i < money[i] != '\0'; i++){
+        /*Thuat Toan:
+            (số phần tử - vị trí của phần tử trong mảng) % 3 = 0  : hàng trăm
+            (số phần tử - vị trí của phần tử trong mảng) % 3 = 2  : hàng chục
+            (số phần tử - vị trí của phần tử trong mảng) % 3 = 1  : hàng đơn vị
+        */
+        int unit = (length - i) % 3;
         displayNumber(money, unit, i);
         switch (unit){
         case TRAM:
-            printf("Tram ");
+            printf("Trăm ");
             break;
         case CHUC:
             if(money[i] != '0' && money[i] != '1')
-                printf("Muoi ");
+                printf("Mươi ");
             break;
         case DONVI:
-            uint8_t location = length - i;
+            /*Thuat Toan:
+                số phần tử - vị trí của phần tử trong mảng = 10  : hàng tỷ
+                số phần tử - vị trí của phần tử trong mảng = 7  : hàng triệu
+                số phần tử - vị trí của phần tử trong mảng = 4  : hàng nghìn
+                số phần tử - vị trí của phần tử trong mảng = 1  : hàng đồng
+            */
+            int location = length - i;
             switch (location){
             case TY:
-                printf("Ty ");
+                printf("Tỷ ");
                 break;
             case TRIEU:
-                printf("Trieu ");
+                printf("Triệu ");
                 break;
             case NGHIN:
-                printf("Nghin ");
+                printf("Nghìn ");
                 break;
             case DONG:
-                printf("Dong ");
-                return 0;
+                printf("Đồng ");
+                return 0;  // kết thúc chương trình
                 break;
             }
-            uint8_t count = 0;
-            uint8_t j = i + 1;
+            int count = 0;
+            int j = i + 1;
             while(money[j] != '\0'){
                 if(money[j] != '0')
                     count++;
                 j++;
             }
             if(count == 0){
-                printf("Dong");
+                printf("Đồng");
                 return 0;
             }
             break;
