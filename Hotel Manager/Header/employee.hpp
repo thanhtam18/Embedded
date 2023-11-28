@@ -43,7 +43,11 @@ class Employee{
     public:
         Employee(string sName, string sPhone, JobPosition jPostion, Schedule sSchedule);
         void getAuthenticate(string sInputPassword);
+        int getIdEmployee();
         string getNameEmployee();
+        string getPhoneEmployee();
+        JobPosition getPositonEmployee();
+        Schedule getScheduleEmployee();
 };     
 
 class EmployeeManager{
