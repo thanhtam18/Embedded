@@ -48,6 +48,11 @@ class Employee{
         string getPhoneEmployee();
         JobPosition getPositonEmployee();
         Schedule getScheduleEmployee();
+
+        void setNameEmployee(string sName);
+        void setPhoneEmployee(string sPhone);
+        void setPositionEmployee(JobPosition position);
+        void setScheduleEmployee(Schedule schedule);
 };     
 
 class EmployeeManager{
