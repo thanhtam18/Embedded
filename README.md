@@ -6,19 +6,19 @@ card and show it on LCD.
 
 ![image](https://github.com/thanhtam18/Embedded/assets/140053842/35f54694-6e35-4fc3-87f2-09ed07cff972)
 
-# Hardware use:
+## Hardware use:
 - STM32F103C8T6
 - RC522 module
 - Servo
 - LCD
 - Micro SD card module
-# Technologies used:
+## Technologies used:
 - PWM
 - I2C
 - SPI
 - TIMER
 - GPIO
-# Result:
+## Result:
 
 ![image](https://github.com/thanhtam18/Embedded/assets/140053842/69d28df1-c7e3-4d0d-a617-79988458d0be)
 
