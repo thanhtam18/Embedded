@@ -16,6 +16,8 @@ card and show it on LCD.
 - PWM
 - I2C
 - SPI
+- TIMER
+- GPIO
 # Result:
 
 ![image](https://github.com/thanhtam18/Embedded/assets/140053842/69d28df1-c7e3-4d0d-a617-79988458d0be)
