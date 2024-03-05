@@ -25,3 +25,25 @@ card and show it on LCD.
 ![image](https://github.com/thanhtam18/Embedded/assets/140053842/68b2142f-3fcf-4309-b62d-98d62573afd5)
 
 </details>
+<details>
+<summary><h1>Battery Management</h1></summary>
+
+Build a system that displays battery capacity and charging
+
+## Hardware use:
+- STM32F103C8T6
+- Pin charge MH-CD42 Module
+- LCD
+## Technologies used:
+- ADC
+- I2C
+- Kalman filter
+- GPIO
+## Result:
+
+![image](https://github.com/thanhtam18/Embedded/assets/140053842/e9f324e8-2699-444a-8364-4042482ff846)
+
+![image](https://github.com/thanhtam18/Embedded/assets/140053842/b5e74796-dbf6-4df2-97cc-5b9ef4f390dd)
+
+
+</details>
