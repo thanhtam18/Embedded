@@ -1,6 +1,6 @@
 /*
 * File: Dio.c
-* Author: Phan Minh Thong
+* Author: Nguyen Thanh Tam
 * Date: --/--/--
 * Description: Specification of DIO Driver.
 */
